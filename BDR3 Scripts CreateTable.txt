@@ -1,4 +1,4 @@
-create database erronka3;
+create database erronka3 CHARACTER SET utf8 COLLATE utf8_general_ci;
 use erronka3;
 
 create table Productos(
@@ -6,33 +6,33 @@ IDProducto integer primary key AUTO_INCREMENT,
 PrecioCompraProd float not null constraint PrecioCompraProd check (PrecioCompraProd > 0),
 FechaCad date not null,
 TipoProd varchar(25) not null,
-NomProd varchar(10) not null,
+NomProd varchar(20) not null,
 PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null,
-NumUniVendido integer not null
+NumUniVendido integer not null constraint NumUniVendido check (NumUniVendido > 0)
 );
 
 create table Local(
-NIF varchar(9) primary key ,
-TipoDeNegocio varchar(25) not null,
+NIF char(9) primary key,
+TipoDeNegocio enum ('Bar','Cafeteria','Restaurante') not null,
 Nombre varchar(20) not null,
 Direccion varchar(40) not null,
 NombreProp varchar(20) not null
 );
 
 create table Tiene(
-NIF varchar(9),
+NIF char(9) ,
 IDProducto integer auto_increment,
-StockProd integer not null,
+StockProd integer not null constraint StockProd check (StockProd > 0),
 constraint PK_Tiene primary key (NIF,IDProducto),
 constraint FK_TieneIDProducto foreign key (IDProducto) references Productos(IDProducto),
 constraint FK_TieneNIF foreign key (NIF) references Local(NIF)
 );
 
 create table operaciones(
-ID integer primary key auto_increment,
+IDOperaciones integer primary key auto_increment,
 TotOperaciones integer not null,
 PrecioTotalOp float not null,
-NIF varchar(9) not null,
+NIF char(9) not null,
 constraint FK_OperacionesNIF foreign key (NIF) references Local(NIF)
 );
 
@@ -43,7 +43,7 @@ NumUniPorProd integer not null constraint NumUniPorProd check (NumUniPorProd > 0
 PrecioPorUnidad float not null constraint PrecioPorUnidad check (PrecioPorUnidad > 0),
 PrecioTotPorProd float not null constraint PrecioTotPorProd check (PrecioTotPorProd > 0),
 constraint PK_Aparecen primary key (ID, IDProducto),
-constraint FK_AparecenID foreign key (ID) references Operaciones(ID),
+constraint FK_AparecenID foreign key (ID) references Operaciones(IDOperaciones),
 constraint FK_AparecenIDProducto foreign key (IDProducto) references Productos(IDProducto)
 );
 
@@ -54,13 +54,14 @@ create table pedido(
 ID integer primary key,
 DomicilioSioNo enum ('Si','No') not null,
 DirDomicilio varchar(50) not null,
-constraint FK_PedidoID foreign key (ID) references Operaciones(ID)
+constraint FK_PedidoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
 create table Factura(
 ID integer primary key,
 NomDes varchar(20) not null,
 DireDes varchar (50) not null,
-NIFDes varchar(9) not null,
-constraint FK_FacturaID foreign key (ID) references Operaciones(ID)
+NIFDes char(9) not null,
+constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones)
 );
+
