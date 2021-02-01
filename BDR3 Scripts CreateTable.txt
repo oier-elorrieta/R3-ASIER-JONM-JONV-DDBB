@@ -7,7 +7,7 @@ PrecioCompraProd float not null constraint PrecioCompraProd check (PrecioCompraP
 FechaCad date not null,
 TipoProd varchar(25) not null,
 NomProd varchar(20) not null,
-PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null,
+PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null
 );
 
 create table Local(
@@ -56,11 +56,15 @@ DirDomicilio varchar(50) not null,
 constraint FK_PedidoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
+create table FacturaDes(
+NomDes varchar(20) primary key,
+DireDes varchar (50) not null,
+NIFDes char(9) not null
+);
+
 create table Factura(
 ID integer primary key,
 NomDes varchar(20) not null,
-DireDes varchar (50) not null,
-NIFDes char(9) not null,
-constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones)
+constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones),
+constraint FK_FacturaNomDes foreign key (NomDes) references FacturaDes(NomDes)
 );
-
