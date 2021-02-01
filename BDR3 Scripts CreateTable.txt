@@ -8,7 +8,6 @@ FechaCad date not null,
 TipoProd varchar(25) not null,
 NomProd varchar(20) not null,
 PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null,
-NumUniVendido integer not null constraint NumUniVendido check (NumUniVendido > 0)
 );
 
 create table Local(
