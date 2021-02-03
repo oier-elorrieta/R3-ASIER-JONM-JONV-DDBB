@@ -54,15 +54,16 @@ constraint FK_PedidoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
 create table Factura(
-ID integer primary key,
-NomDes varchar(20) not null,
+ID integer not null,
+NIF char(9)  primary key,
 constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
 create table DesFactura(
-NomDes varchar(20) primary key,
-DireDes varchar (50) not null,
-NIFDes char(9) not null
+NIF char(9) primary key,
+NomDes varchar(20) not null,
+DirDes varchar (20),
+constraint FK_DesFacturaNIF foreign key (NIF) references Factura(NIF)
 );
 
 create table Aprovisionamiento(
@@ -95,9 +96,9 @@ create table Platos(
 Codigo integer primary key auto_increment,
 PrecioDeVenta float not null constraint PrecioDeVenta check (PrecioDeVenta > 0),
 Tipo enum ('Primero','Segundo','Postre') not null,
-Nombre varchar(25) not null, 
+Nombre varchar(25) not null,
 marisco boolean not null,
-FrutosSecos boolean not null, 
+FrutosSecos boolean not null,
 gluten boolean not null,
 vegetariano boolean not null,
 vegano boolean not null
@@ -109,4 +110,11 @@ CodComandas integer,
 constraint PK_TienePl primary key (CodPlatos,CodComandas),
 constraint FK_TienePlCodPlatos foreign key (CodPlatos) references Platos(Codigo),
 constraint FK_TienePlCodComandas foreign key (CodComandas) references Comandas(codigo)
+);
+
+
+create table usuarios(
+usuario char(9) primary key,
+contraseña varchar(20) not null,
+constraint FK_Usuariosusuario foreign key (usuario) references Local(NIF)
 );
