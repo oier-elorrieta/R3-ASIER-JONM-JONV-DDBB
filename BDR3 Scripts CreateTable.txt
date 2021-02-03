@@ -104,7 +104,7 @@ vegetariano boolean not null,
 vegano boolean not null
 );
 
-create table TienePl(
+create table contiene(
 CodPlatos integer,
 CodComandas integer,
 constraint PK_TienePl primary key (CodPlatos,CodComandas),
