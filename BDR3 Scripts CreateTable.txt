@@ -13,6 +13,7 @@ PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd
 create table Local(
 NIF char(9) primary key,
 TipoDeNegocio enum ('Bar','Cafeteria','Restaurante') not null,
+NIFTrabajador char(9),
 Nombre varchar(20) not null,
 Direccion varchar(40) not null,
 NombreProp varchar(20) not null
@@ -66,55 +67,64 @@ DirDes varchar (20),
 constraint FK_DesFacturaNIF foreign key (NIF) references Factura(NIF)
 );
 
-create table Aprovisionamiento(
-ID integer primary key auto_increment,
-PrecioCompra float not null constraint PrecioCompra check (PrecioCompra > 0),
+Create table aprovisionamiento(
+ID integer primary key,
 constraint FK_AprovisionamientoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
-create table Fabricante(
-Nombre varchar(20) primary key,
-tiempo date not null,
-stock integer not null constraint stock check (stock > -1),
-ID integer not null,
-constraint FK_Fabricantestock foreign key (ID) references Aprovisionamiento(ID)
+create table fabricante(
+nombre varchar(25) primary key,
+tiempo  date not null,
+stock integer not null constraint Stock check (Stock > 0),
+ID integer,
+IDProducto integer,
+constraint FK_FabricanteID foreign key (ID) references Aprovisionamiento(ID),
+constraint FK_FabricanteIDProducto foreign key (IDProducto) references Productos(IDProducto)
 );
 
-create table Comandas(
-codigo integer primary key auto_increment
-);
-
-create table Incluye(
-IDprod integer,
-codigo integer,
-constraint PK_Incluye primary key (IDprod,codigo),
-constraint FK_IncluyeIDprod foreign key (IDprod) references Productos(IDProducto),
-constraint FK_Incluyecodigo foreign key (codigo) references Comandas(codigo)
+create table comandas(
+ID integer primary key,
+Codigo integer not null,
+constraint FK_ComandaID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
 create table Platos(
-Codigo integer primary key auto_increment,
-PrecioDeVenta float not null constraint PrecioDeVenta check (PrecioDeVenta > 0),
-Tipo enum ('Primero','Segundo','Postre') not null,
-Nombre varchar(25) not null,
-marisco boolean not null,
-FrutosSecos boolean not null,
-gluten boolean not null,
-vegetariano boolean not null,
-vegano boolean not null
+Codigo integer auto_increment primary key,
+Tipo enum ('Primer Plato','Segundo Plato','Postre') not null,
+Nombre varchar(25) not null
 );
 
-create table contiene(
+create table Contiene(
 CodPlatos integer,
 CodComandas integer,
-constraint PK_TienePl primary key (CodPlatos,CodComandas),
-constraint FK_TienePlCodPlatos foreign key (CodPlatos) references Platos(Codigo),
-constraint FK_TienePlCodComandas foreign key (CodComandas) references Comandas(codigo)
+Cantidad integer not null constraint cantidad check (cantidad > 0),
+PrecioDeVenta float not null constraint PrecioDeVenta check (PrecioDeVenta > 0),
+constraint PK_Contiene primary key (CodPlatos, CodComandas),
+constraint FK_ContieneCodPlatos foreign key (CodPlatos) references Platos(Codigo),
+constraint FK_ContieneCodComandas foreign key (CodComandas) references Comandas(ID)
 );
 
-
-create table usuarios(
-usuario char(9) primary key,
-contraseña varchar(20) not null,
-constraint FK_Usuariosusuario foreign key (usuario) references Local(NIF)
+create table ingredientes(
+Nombre varchar(50) primary key,
+FrutosSecos enum ('Si','No') default 'No',
+Marisco enum ('Si','No') default 'No',
+Gluten enum ('Si','No') default 'No',
+Vegetariano enum ('Si','No') default 'No',
+Vegano enum ('Si','No') default 'No'
 );
+
+create table Conforman(
+CodPlatos integer,
+Nombrecon varchar(50),
+constraint PK_Conforman primary key (CodPlatos, Nombrecon),
+constraint FK_ConformanCodplatos foreign key (Codplatos) references Platos(Codigo),
+constraint FK_ConformanNombrecon foreign key (Nombrecon) references Ingredientes(Nombre)
+);
+
+create table Usuarios(
+Usuario char(9) primary key,
+Contraseña varchar(16) not null
+);
+
+Alter table local
+add constraint FK_LocalNIFTrabajador foreign key (NIFTrabajador) references Usuarios(Usuario);
