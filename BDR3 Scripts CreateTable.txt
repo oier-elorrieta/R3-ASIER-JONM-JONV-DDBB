@@ -11,9 +11,8 @@ PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd
 );
 
 create table Local(
-NIF char(9) primary key,
+NIF char(9) primary key auto_increment,
 TipoDeNegocio enum ('Bar','Cafeteria','Restaurante') not null,
-NIFTrabajador char(9),
 Nombre varchar(20) not null,
 Direccion varchar(40) not null,
 NombreProp varchar(20) not null
@@ -21,7 +20,7 @@ NombreProp varchar(20) not null
 
 create table Tiene(
 NIF char(9) ,
-IDProducto integer auto_increment,
+IDProducto integer,
 StockProd integer not null constraint StockProd check (StockProd > 0),
 constraint PK_Tiene primary key (NIF,IDProducto),
 constraint FK_TieneIDProducto foreign key (IDProducto) references Productos(IDProducto),
@@ -30,7 +29,6 @@ constraint FK_TieneNIF foreign key (NIF) references Local(NIF)
 
 create table operaciones(
 IDOperaciones integer primary key auto_increment,
-TotOperaciones integer not null,
 PrecioTotalOp float not null,
 NIF char(9) not null,
 constraint FK_OperacionesNIF foreign key (NIF) references Local(NIF)
@@ -123,8 +121,99 @@ constraint FK_ConformanNombrecon foreign key (Nombrecon) references Ingredientes
 
 create table Usuarios(
 Usuario char(9) primary key,
-Contraseña varchar(16) not null
+Contraseña varchar(16) not null,
+NIF char(9),
+constraint FK_UsuariosNIF foreign key (NIF) references Local (NIF)
 );
 
-Alter table local
-add constraint FK_LocalNIFTrabajador foreign key (NIFTrabajador) references Usuarios(Usuario);
+
+insert into Productos values
+(default, 0.20, '2025-01-01', 'refresco', 'coca-cola', 1.50),
+(default, 0.20, '2025-01-01', 'refresco', 'kas', 1.50),
+(default, 0.10, '2025-01-01', 'café', 'café con leche', 1.00),
+(default, 0.20, '2025-01-01', 'zukua', 'Zumo', 2.00),
+(default, 0.20, '2025-01-01', 'aperitivo', 'Pintxo tortilla', 3.00);
+
+insert into local values
+('12345678a','Bar','Jose','Carrera Lorem ipsum dolor, 250B','Antonio'),
+('12345678b','Restaurante','Ana','Acceso Lorem ipsum dolor sit, 24 17ºD','Ana'),
+('12345678c','Restaurante','Paco','Avenida Lorem ipsum dolor, 283A 13ºF','Pedro'),
+('12345678d','Cafeteria','Maria','Paseo Lorem ipsum, 45A','Manolo'),
+('12345678e','Bar','Juanjo','Pasaje Lorem ipsum, 99','Laura');
+
+insert into tiene values
+('12345678a',1,800),
+('12345678a',2,234),
+('12345678a',3,768),
+('12345678a',4,755),
+('12345678a',5,343),
+('12345678b',1,996),
+('12345678b',2,854),
+('12345678b',3,654),
+('12345678b',4,158),
+('12345678b',5,545),
+('12345678c',1,158),
+('12345678c',2,962),
+('12345678c',3,546),
+('12345678c',4,298),
+('12345678c',5,798),
+('12345678d',1,78),
+('12345678d',2,36),
+('12345678d',3,56),
+('12345678d',4,44),
+('12345678d',5,89),
+('12345678e',1,38),
+('12345678e',2,100),
+('12345678e',3,89),
+('12345678e',4,65),
+('12345678e',5,32);
+
+insert into platos values
+(default, 'Primer Plato', 'Lentejas'),
+(default, 'Segundo Plato', 'Filete'),
+(default, 'Postre', 'Natillas'),
+(default, 'Primer Plato', 'Sopa de marisco'),
+(default, 'Segundo Plato', 'Pollo asado'),
+(default, 'Postre', 'Yogurt'),
+(default, 'Primer Plato', 'Pure'),
+(default, 'Segundo Plato', 'Ensalada'),
+(default, 'Postre', 'Tarta'),
+(default, 'Primer Plato', 'Alubias');
+
+insert into ingredientes values
+('nombreingrediente1',default,default,default,default,'si'),
+('nombreingrediente2',default,default,default,default,'si'),
+('nombreingrediente3',default,default,default,default,'si'),
+('nombreingrediente4',default,default,default,default,'si'),
+('nombreingrediente5',default,default,default,default,'si'),
+('nombreingrediente6',default,default,default,default,'si'),
+('nombreingrediente7',default,default,default,default,'si'),
+('nombreingrediente8',default,default,default,default,'si'),
+('nombreingrediente9',default,default,default,default,'si'),
+('nombreingrediente10',default,default,default,default,'si'),
+('nombreingrediente11',default,default,default,default,'si'),
+('nombreingrediente12',default,default,default,default,'si'),
+('nombreingrediente13',default,default,default,default,'si'),
+('nombreingrediente14',default,default,default,default,'si'),
+('nombreingrediente15',default,default,default,default,'si'),
+('nombreingrediente16',default,default,default,default,'si'),
+('nombreingrediente17',default,default,default,default,'si'),
+('nombreingrediente18',default,default,default,default,'si'),
+('nombreingrediente19',default,default,default,default,'si'),
+('nombreingrediente20',default,default,default,default,'si');
+
+insert into ingredientes values
+('pollo de corral',default,default,default,default,default),
+('lentejas beluga',default,default,default,'si','si'),
+('langostinos tigre gigante',default,'si',default,default,default),
+('aceite de oliva',default,default,default,'si','si'),
+('sal fina',default,default,default,'si','si'),
+('sal gorda',default,default,default,'si','si'),
+('vinagre de vino blanco',default,default,default,'si','si'),
+('tomate cherry',default,default,default,'si','si'),
+('lechuga iceberg',default,default,default,'si','si'),
+('cebolla blanca',default,default,default,'si','si'),
+('pescado rape',default,default,default,default,default),
+('almejas fina',default,'si',default,default,default),
+('alubias rojas',default,default,default,'si','si'),
+('yogurt danone',default,default,default,'si',default);
