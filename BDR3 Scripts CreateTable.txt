@@ -11,7 +11,7 @@ PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd
 );
 
 create table Local(
-NIF char(9) primary key auto_increment,
+NIF char(9) primary key,
 TipoDeNegocio enum ('Bar','Cafeteria','Restaurante') not null,
 Nombre varchar(20) not null,
 Direccion varchar(40) not null,
@@ -180,27 +180,6 @@ insert into platos values
 (default, 'Postre', 'Tarta'),
 (default, 'Primer Plato', 'Alubias');
 
-insert into ingredientes values
-('nombreingrediente1',default,default,default,default,'si'),
-('nombreingrediente2',default,default,default,default,'si'),
-('nombreingrediente3',default,default,default,default,'si'),
-('nombreingrediente4',default,default,default,default,'si'),
-('nombreingrediente5',default,default,default,default,'si'),
-('nombreingrediente6',default,default,default,default,'si'),
-('nombreingrediente7',default,default,default,default,'si'),
-('nombreingrediente8',default,default,default,default,'si'),
-('nombreingrediente9',default,default,default,default,'si'),
-('nombreingrediente10',default,default,default,default,'si'),
-('nombreingrediente11',default,default,default,default,'si'),
-('nombreingrediente12',default,default,default,default,'si'),
-('nombreingrediente13',default,default,default,default,'si'),
-('nombreingrediente14',default,default,default,default,'si'),
-('nombreingrediente15',default,default,default,default,'si'),
-('nombreingrediente16',default,default,default,default,'si'),
-('nombreingrediente17',default,default,default,default,'si'),
-('nombreingrediente18',default,default,default,default,'si'),
-('nombreingrediente19',default,default,default,default,'si'),
-('nombreingrediente20',default,default,default,default,'si');
 
 insert into ingredientes values
 ('pollo de corral',default,default,default,default,default),
@@ -217,3 +196,19 @@ insert into ingredientes values
 ('almejas fina',default,'si',default,default,default),
 ('alubias rojas',default,default,default,'si','si'),
 ('yogurt danone',default,default,default,'si',default);
+
+insert into conforman values 
+('pollo de corral', 5),
+('lentejas beluga' ,  1),
+('langostinos tigre', 4), 
+('aceite de oliva' , 8),
+('sal fina' , 8),
+('sal gorda' , 2),
+('vinagre de vino blanco' , 8),
+('tomate cherry' , 8),
+('lechuga iceberg' , 8),
+('cebolla blanca' , 8),
+('pescado rape' , 4),
+('almejas fina' , 4),
+('alubias rojas' , 10),
+('yogurt danone' , 6);
