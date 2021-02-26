@@ -120,7 +120,7 @@ constraint FK_ConformanNombrecon foreign key (Nombrecon) references Ingredientes
 );
 
 create table Usuarios(
-Usuario char(9) primary key,
+Usuario varchar(20) primary key,
 Contraseña varchar(16) not null,
 NIF char(9),
 constraint FK_UsuariosNIF foreign key (NIF) references Local (NIF)
@@ -135,11 +135,11 @@ insert into Productos values
 (default, 0.20, '2025-01-01', 'aperitivo', 'Pintxo tortilla', 3.00);
 
 insert into local values
-('12345678a','Bar','Jose','Carrera Lorem ipsum dolor, 250B','Antonio'),
-('12345678b','Restaurante','Ana','Acceso Lorem ipsum dolor sit, 24 17ºD','Ana'),
-('12345678c','Restaurante','Paco','Avenida Lorem ipsum dolor, 283A 13ºF','Pedro'),
-('12345678d','Cafeteria','Maria','Paseo Lorem ipsum, 45A','Manolo'),
-('12345678e','Bar','Juanjo','Pasaje Lorem ipsum, 99','Laura');
+('12345678a','Bar','Bar jose','Carrera Lorem ipsum dolor, 250B','Antonio'),
+('12345678b','Restaurante','Restaurante Ana','Acceso Lorem ipsum dolor sit, 24 17ºD','Ana'),
+('12345678c','Restaurante','Restaurante Paco','Avenida Lorem ipsum dolor, 283A 13ºF','Pedro'),
+('12345678d','Cafeteria','Cafeteria Maria','Paseo Lorem ipsum, 45A','Manolo'),
+('12345678e','Bar','Bar Juanjo','Pasaje Lorem ipsum, 99','Laura');
 
 insert into tiene values
 ('12345678a',1,800),
@@ -184,7 +184,7 @@ insert into platos values
 insert into ingredientes values
 ('pollo de corral',default,default,default,default,default),
 ('lentejas beluga',default,default,default,'si','si'),
-('langostinos tigre gigante',default,'si',default,default,default),
+('langostinos tigre',default,'si',default,default,default),
 ('aceite de oliva',default,default,default,'si','si'),
 ('sal fina',default,default,default,'si','si'),
 ('sal gorda',default,default,default,'si','si'),
@@ -198,17 +198,17 @@ insert into ingredientes values
 ('yogurt danone',default,default,default,'si',default);
 
 insert into conforman values 
-('pollo de corral', 5),
-('lentejas beluga' ,  1),
-('langostinos tigre', 4), 
-('aceite de oliva' , 8),
-('sal fina' , 8),
-('sal gorda' , 2),
-('vinagre de vino blanco' , 8),
-('tomate cherry' , 8),
-('lechuga iceberg' , 8),
-('cebolla blanca' , 8),
-('pescado rape' , 4),
-('almejas fina' , 4),
-('alubias rojas' , 10),
-('yogurt danone' , 6);
+(5 ,'pollo de corral'),
+(1 ,'lentejas beluga' ),
+(4 ,'langostinos tigre'), 
+(8, 'aceite de oliva' ),
+(8, 'sal fina'),
+(2, 'sal gorda'),
+(8, 'vinagre de vino blanco'),
+(8, 'tomate cherry'),
+(8, 'lechuga iceberg'),
+(8, 'cebolla blanca'),
+(4, 'pescado rape'),
+(4, 'almejas fina'),
+(10, 'alubias rojas'),
+(6, 'yogurt danone');
