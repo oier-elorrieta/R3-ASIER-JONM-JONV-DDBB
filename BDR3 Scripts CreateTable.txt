@@ -1,14 +1,23 @@
 create database erronka3 CHARACTER SET utf8 COLLATE utf8_general_ci;
 use erronka3;
 
+create table fabricante(
+nombre varchar(25) primary key,
+tiempo  date not null
+);
+
 create table Productos(
 IDProducto integer primary key AUTO_INCREMENT,
 PrecioCompraProd float not null constraint PrecioCompraProd check (PrecioCompraProd > 0),
 FechaCad date not null,
 TipoProd varchar(25) not null,
 NomProd varchar(20) not null,
+Stock integer not null constraint stock check (stock > 0),
+Nombrefab varchar(25),
+constraint FK_ProductosNombrefab foreign key (Nombrefab) references Fabricante(nombre),
 PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null
 );
+
 
 create table Local(
 NIF char(9) primary key,
@@ -67,18 +76,13 @@ constraint FK_DesFacturaNIF foreign key (NIF) references Factura(NIF)
 
 Create table aprovisionamiento(
 ID integer primary key,
+Preciocompra float not null constraint ch_Preciocompra check (Preciocompra > 0),
+Nombrefab varchar(25),
+constraint FK_AprovisionamientoNombrefab foreign key (Nombrefab) references Fabricante(nombre),
 constraint FK_AprovisionamientoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
-create table fabricante(
-nombre varchar(25) primary key,
-tiempo  date not null,
-stock integer not null constraint Stock check (Stock > 0),
-ID integer,
-IDProducto integer,
-constraint FK_FabricanteID foreign key (ID) references Aprovisionamiento(ID),
-constraint FK_FabricanteIDProducto foreign key (IDProducto) references Productos(IDProducto)
-);
+
 
 create table comandas(
 ID integer primary key,
@@ -120,7 +124,7 @@ constraint FK_ConformanNombrecon foreign key (Nombrecon) references Ingredientes
 );
 
 create table Usuarios(
-Usuario varchar(20) primary key,
+Usuario char(9) primary key,
 Contraseña varchar(16) not null,
 NIF char(9),
 constraint FK_UsuariosNIF foreign key (NIF) references Local (NIF)
