@@ -12,10 +12,10 @@ PrecioCompraProd float not null constraint PrecioCompraProd check (PrecioCompraP
 FechaCad date not null,
 TipoProd varchar(25) not null,
 NomProd varchar(20) not null,
+PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null,
 Stock integer not null constraint stock check (stock > 0),
 Nombrefab varchar(25),
-constraint FK_ProductosNombrefab foreign key (Nombrefab) references Fabricante(nombre),
-PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null
+constraint FK_ProductosNombrefab foreign key (Nombrefab) references Fabricante(nombre)
 );
 
 
@@ -74,7 +74,7 @@ DirDes varchar (20),
 constraint FK_DesFacturaNIF foreign key (NIF) references Factura(NIF)
 );
 
-Create table aprovisionamiento(
+create table aprovisionamiento(
 ID integer primary key,
 Preciocompra float not null constraint ch_Preciocompra check (Preciocompra > 0),
 Nombrefab varchar(25),
@@ -130,13 +130,17 @@ NIF char(9),
 constraint FK_UsuariosNIF foreign key (NIF) references Local (NIF)
 );
 
-
+insert into fabricante values
+('fabricante1', '2022-01-01'),
+('fabricante2', '2022-01-01'),
+('fabricante3', '2022-01-01'),
+('fabricante4', '2022-01-01');
 insert into Productos values
-(default, 0.20, '2025-01-01', 'refresco', 'coca-cola', 1.50),
-(default, 0.20, '2025-01-01', 'refresco', 'kas', 1.50),
-(default, 0.10, '2025-01-01', 'café', 'café con leche', 1.00),
-(default, 0.20, '2025-01-01', 'zukua', 'Zumo', 2.00),
-(default, 0.20, '2025-01-01', 'aperitivo', 'Pintxo tortilla', 3.00);
+(default, 0.20, '2025-01-01', 'refresco', 'coca-cola', 1.50, 150,'fabricante1'),
+(default, 0.20, '2025-01-01', 'refresco', 'kas', 1.50, 160,'fabricante4'),
+(default, 0.10, '2025-01-01', 'café', 'café con leche', 1.50, 130,'fabricante3'),
+(default, 0.20, '2025-01-01', 'zukua', 'Zumo', 1.50, 250,'fabricante1'),
+(default, 0.20, '2025-01-01', 'aperitivo', 'Pintxo tortilla', 1.50, 50,'fabricante1');
 
 insert into local values
 ('12345678a','Bar','Bar jose','Carrera Lorem ipsum dolor, 250B','Antonio'),
@@ -216,3 +220,9 @@ insert into conforman values
 (4, 'almejas fina'),
 (10, 'alubias rojas'),
 (6, 'yogurt danone');
+
+insert into usuarios values
+('12345678b','bar','12345678a'),
+('12345678r','restaurante','12345678b'),
+('12345678c','cafeteria','12345678d');
+
