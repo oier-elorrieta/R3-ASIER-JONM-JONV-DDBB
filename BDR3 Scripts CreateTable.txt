@@ -10,7 +10,7 @@ create table Productos(
 IDProducto integer primary key AUTO_INCREMENT,
 PrecioCompraProd float not null constraint PrecioCompraProd check (PrecioCompraProd > 0),
 FechaCad date,
-TipoProd enum ("refresco","cafe","zukua","aperitivo") not null,
+TipoProd enum ('bebida','comida','otros') not null,
 NomProd varchar(20) not null,
 PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null,
 Nombrefab varchar(25),
@@ -60,19 +60,18 @@ DirDomicilio varchar(50) not null,
 constraint FK_PedidoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
-create table Factura(
-ID integer not null,
-NIF char(9)  primary key,
-constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones)
-);
-
 create table DesFactura(
 NIF char(9) primary key,
 NomDes varchar(20) not null,
-DirDes varchar (20),
-constraint FK_DesFacturaNIF foreign key (NIF) references Factura(NIF)
+DirDes varchar (20)
 );
 
+create table Factura(
+ID integer  primary key,
+NIF char(9) not null,
+constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones),
+constraint FK_DesFacturaNIF foreign key (NIF) references DesFactura(NIF)
+);
 create table aprovisionamiento(
 ID integer primary key,
 Preciocompra float not null constraint ch_Preciocompra check (Preciocompra > 0),
@@ -133,11 +132,11 @@ insert into fabricante values
 ('fabricante3', '2022-01-01'),
 ('fabricante4', '2022-01-01');
 insert into Productos values
-(default, 0.20, '2025-01-01', 'refresco', 'coca-cola', 1.50, 150,'fabricante1'),
-(default, 0.20, '2025-01-01', 'refresco', 'kas', 1.50, 160,'fabricante4'),
-(default, 0.10, '2025-01-01', 'cafe', 'café con leche', 1.50, 130,'fabricante3'),
-(default, 0.20, '2025-01-01', 'zukua', 'Zumo', 1.50, 250,'fabricante1'),
-(default, 0.20, '2025-01-01', 'aperitivo', 'Pintxo tortilla', 1.50, 50,'fabricante1');
+(default, 0.20, '2025-01-01', 'bebida', 'coca-cola', 1.50,'fabricante1'),
+(default, 0.20, '2025-01-01', 'bebida', 'kas', 1.50, 'fabricante4'),
+(default, 0.10, '2025-01-01', 'bebida', 'café con leche', 1.50, 'fabricante3'),
+(default, 0.20, '2025-01-01', 'bebida', 'Zumo', 1.50, 'fabricante1'),
+(default, 0.20, '2025-01-01', 'comida', 'Pintxo tortilla', 1.50, 'fabricante1');
 
 insert into local values
 ('12345678a','Bar','Bar jose','Carrera Lorem ipsum dolor, 250B','Antonio'),
@@ -222,4 +221,5 @@ insert into usuarios values
 ('12345678b','bar','12345678a'),
 ('12345678r','restaurante','12345678b'),
 ('12345678c','cafeteria','12345678d');
+
 
