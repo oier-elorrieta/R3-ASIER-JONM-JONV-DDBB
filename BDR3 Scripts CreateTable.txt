@@ -9,11 +9,10 @@ tiempo  date not null
 create table Productos(
 IDProducto integer primary key AUTO_INCREMENT,
 PrecioCompraProd float not null constraint PrecioCompraProd check (PrecioCompraProd > 0),
-FechaCad date not null,
-TipoProd varchar(25) not null,
+FechaCad date,
+TipoProd enum ("refresco","cafe","zukua","aperitivo") not null,
 NomProd varchar(20) not null,
 PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null,
-Stock integer not null constraint stock check (stock > 0),
 Nombrefab varchar(25),
 constraint FK_ProductosNombrefab foreign key (Nombrefab) references Fabricante(nombre)
 );
@@ -82,8 +81,6 @@ constraint FK_AprovisionamientoNombrefab foreign key (Nombrefab) references Fabr
 constraint FK_AprovisionamientoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
-
-
 create table comandas(
 ID integer primary key,
 Codigo integer not null,
@@ -126,7 +123,7 @@ constraint FK_ConformanNombrecon foreign key (Nombrecon) references Ingredientes
 create table Usuarios(
 Usuario char(9) primary key,
 Contraseña varchar(16) not null,
-NIF char(9),
+NIF char(9) not null,
 constraint FK_UsuariosNIF foreign key (NIF) references Local (NIF)
 );
 
@@ -138,7 +135,7 @@ insert into fabricante values
 insert into Productos values
 (default, 0.20, '2025-01-01', 'refresco', 'coca-cola', 1.50, 150,'fabricante1'),
 (default, 0.20, '2025-01-01', 'refresco', 'kas', 1.50, 160,'fabricante4'),
-(default, 0.10, '2025-01-01', 'café', 'café con leche', 1.50, 130,'fabricante3'),
+(default, 0.10, '2025-01-01', 'cafe', 'café con leche', 1.50, 130,'fabricante3'),
 (default, 0.20, '2025-01-01', 'zukua', 'Zumo', 1.50, 250,'fabricante1'),
 (default, 0.20, '2025-01-01', 'aperitivo', 'Pintxo tortilla', 1.50, 50,'fabricante1');
 
