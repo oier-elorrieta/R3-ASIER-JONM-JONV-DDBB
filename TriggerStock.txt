@@ -1,15 +1,23 @@
 
-delimiter |
-CREATE TRIGGER triggerstock before update ON tiene
-FOR EACH ROW
-BEGIN
- 
- if old.stockprod < 5 then
+delimiter //
+create trigger modificar_stock after INSERT on aparecen
+   for each row
+		begin
+			declare Num integer default (select max(IDoperaciones) from operaciones);
+            declare abc char(9) default (select NIF from operaciones where IDOperaciones = Num);
+				if (select Tipo from operaciones where IDOperaciones = Num) = 'aprovisionamiento'
+then
+update tiene set Stockprod = Stockprod + new.NumUniPorProd
+where NIF = abc and idproducto = new.idproducto;
+else
+update tiene set Stockprod = Stockprod - new.NumUniPorProd 
+where NIF = abc and idproducto = new.idproducto;
+end if;
+end;//
 
 
-    set new.stockprod = old.stockprod + 50;
- 
-  END IF;
-  END;
-|
-delimiter ;
+
+
+
+
+

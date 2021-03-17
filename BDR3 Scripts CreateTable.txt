@@ -1,14 +1,22 @@
 create database erronka3 CHARACTER SET utf8 COLLATE utf8_general_ci;
 use erronka3;
 
+create table fabricante(
+nombre varchar(25) primary key,
+tiempo  date not null
+);
+
 create table Productos(
 IDProducto integer primary key AUTO_INCREMENT,
 PrecioCompraProd float not null constraint PrecioCompraProd check (PrecioCompraProd > 0),
-FechaCad date not null,
-TipoProd varchar(25) not null,
+FechaCad date,
+TipoProd enum ('bebida','comida','otros') not null,
 NomProd varchar(20) not null,
-PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null
+PrecioVentaProd float not null constraint PrecioVentaProd check (PrecioVentaProd > 0) not null,
+Nombrefab varchar(25),
+constraint FK_ProductosNombrefab foreign key (Nombrefab) references Fabricante(nombre)
 );
+
 
 create table Local(
 NIF char(9) primary key,
@@ -31,6 +39,7 @@ create table operaciones(
 IDOperaciones integer primary key auto_increment,
 PrecioTotalOp float not null,
 NIF char(9) not null,
+tipo enum ('aprovisionamiento','factura','pedido','comanda') not null,
 constraint FK_OperacionesNIF foreign key (NIF) references Local(NIF)
 );
 
@@ -52,32 +61,23 @@ DirDomicilio varchar(50) not null,
 constraint FK_PedidoID foreign key (ID) references Operaciones(IDOperaciones)
 );
 
-create table Factura(
-ID integer not null,
-NIF char(9)  primary key,
-constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones)
-);
-
 create table DesFactura(
 NIF char(9) primary key,
 NomDes varchar(20) not null,
-DirDes varchar (20),
-constraint FK_DesFacturaNIF foreign key (NIF) references Factura(NIF)
+DirDes varchar (20)
 );
 
-Create table aprovisionamiento(
+create table Factura(
+ID integer  primary key,
+NIF char(9) not null,
+constraint FK_FacturaID foreign key (ID) references Operaciones(IDOperaciones),
+constraint FK_DesFacturaNIF foreign key (NIF) references DesFactura(NIF)
+);
+create table aprovisionamiento(
 ID integer primary key,
+Nombrefab varchar(25),
+constraint FK_AprovisionamientoNombrefab foreign key (Nombrefab) references Fabricante(nombre),
 constraint FK_AprovisionamientoID foreign key (ID) references Operaciones(IDOperaciones)
-);
-
-create table fabricante(
-nombre varchar(25) primary key,
-tiempo  date not null,
-stock integer not null constraint Stock check (Stock > 0),
-ID integer,
-IDProducto integer,
-constraint FK_FabricanteID foreign key (ID) references Aprovisionamiento(ID),
-constraint FK_FabricanteIDProducto foreign key (IDProducto) references Productos(IDProducto)
 );
 
 create table comandas(
@@ -120,19 +120,23 @@ constraint FK_ConformanNombrecon foreign key (Nombrecon) references Ingredientes
 );
 
 create table Usuarios(
-Usuario varchar(20) primary key,
+Usuario char(9) primary key,
 Contraseña varchar(16) not null,
-NIF char(9),
+NIF char(9) not null,
 constraint FK_UsuariosNIF foreign key (NIF) references Local (NIF)
 );
 
-
+insert into fabricante values
+('fabricante1', '2022-01-01'),
+('fabricante2', '2022-01-01'),
+('fabricante3', '2022-01-01'),
+('fabricante4', '2022-01-01');
 insert into Productos values
-(default, 0.20, '2025-01-01', 'refresco', 'coca-cola', 1.50),
-(default, 0.20, '2025-01-01', 'refresco', 'kas', 1.50),
-(default, 0.10, '2025-01-01', 'café', 'café con leche', 1.00),
-(default, 0.20, '2025-01-01', 'zukua', 'Zumo', 2.00),
-(default, 0.20, '2025-01-01', 'aperitivo', 'Pintxo tortilla', 3.00);
+(default, 0.20, '2025-01-01', 'bebida', 'coca-cola', 1.30,'fabricante1'),
+(default, 0.20, '2025-01-01', 'bebida', 'kas', 1.20, 'fabricante4'),
+(default, 0.10, '2025-01-01', 'bebida', 'café con leche', 1.50, 'fabricante3'),
+(default, 0.20, '2025-01-01', 'bebida', 'Zumo', 1.80, 'fabricante1'),
+(default, 0.20, '2025-01-01', 'comida', 'Pintxo tortilla', 2.50, 'fabricante1');
 
 insert into local values
 ('12345678a','Bar','Bar jose','Carrera Lorem ipsum dolor, 250B','Antonio'),
@@ -212,3 +216,8 @@ insert into conforman values
 (4, 'almejas fina'),
 (10, 'alubias rojas'),
 (6, 'yogurt danone');
+
+insert into usuarios values
+('12345678b','bar','12345678a'),
+('12345678r','restaurante','12345678b'),
+('12345678c','cafeteria','12345678d');
